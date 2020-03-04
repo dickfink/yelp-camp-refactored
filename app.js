@@ -24,6 +24,7 @@ var commentRoutes    = require("./routes/comments"),
 mongoose.Promise = global.Promise;
 
 const databaseUri = process.env.MONGODB_URI || 'mongodb://localhost/yelp_camp';
+const port = process.env.PORT || 3000;
 
 mongoose.connect(databaseUri, { useMongoClient: true })
       .then(() => console.log(`Database connected`))
@@ -64,6 +65,6 @@ app.use("/", indexRoutes);
 app.use("/campgrounds", campgroundRoutes);
 app.use("/campgrounds/:id/comments", commentRoutes);
 
-app.listen(process.env.PORT, process.env.IP, function(){
-   console.log("The YelpCamp Server Has Started!");
+app.listen(port, process.env.IP, function(){
+   console.log("The YelpCamp Server Has Started On Port:" + process.env.PORT);
 });
