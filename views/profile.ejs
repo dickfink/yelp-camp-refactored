@@ -1,0 +1,10 @@
+<% include ./partials/header %>
+    <div class="row">
+        <h1 style="text-align: center">User</h1>
+        <% if(currentUser){ %>
+            <p>Signed In As <%= currentUser.username %></p>
+        <% } else { %>
+            <p>You need to log in bruh!</p>
+        <% } %>
+    </div>
+<% include ./partials/footer %>
