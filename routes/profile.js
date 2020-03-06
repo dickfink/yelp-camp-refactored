@@ -5,14 +5,13 @@ var Comment = require("../models/comment");
 var middleware = require("../middleware");
 var geocoder = require('geocoder');
 var { isLoggedIn, checkUserCampground, checkUserComment, isAdmin, isSafe } = middleware; // destructuring assignment
-
 // Define escapeRegex function for search feature
 function escapeRegex(text) {
     return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
 };
 
 //INDEX - show all campgrounds
-router.get("/", function(req, res){
+router.get("/", isLoggedIn, function(req, res){
   if(req.query.search && req.xhr) {
       const regex = new RegExp(escapeRegex(req.query.search), 'gi');
       // Get all campgrounds from DB
@@ -24,6 +23,8 @@ router.get("/", function(req, res){
          }
       });
   } else {
+   var currentUser = res.locals.currentUser._id;
+   console.log(currentUser);
       // Get all campgrounds from DB
       Campground.find({}, function(err, allCampgrounds){
          if(err){
@@ -32,6 +33,7 @@ router.get("/", function(req, res){
             if(req.xhr) {
               res.json(allCampgrounds);
             } else {
+            console.log(allCampgrounds);
               res.render("profile",{campgrounds: allCampgrounds, page: 'profile'});
             }
          }
