@@ -1,34 +1,21 @@
 var express = require("express");
 var router  = express.Router();
 var Campground = require("../models/campground");
-var Comment = require("../models/comment");
 var middleware = require("../middleware");
-var geocoder = require('geocoder');
 var { isLoggedIn, checkUserCampground, checkUserComment, isAdmin, isSafe } = middleware; // destructuring assignment
-// Define escapeRegex function for search feature
-function escapeRegex(text) {
-    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
-};
 
-//INDEX - show all campgrounds
+//INDEX - show all campgrounds belonging to logged in user
 router.get("/", isLoggedIn, function(req, res){
    var currentUser = res.locals.currentUser;
-      // Get all campgrounds from DB
-      Campground.find({}).exec(function(err, allCampgrounds){
+      // Get all campgrounds from DB where the author's ID matches the current user's ID
+      Campground.find({"author.id": currentUser.id}).exec(function(err, userCampgrounds){
          if(err){
              console.log(err);
          } else {
             if(req.xhr) {
-              res.json(allCampgrounds);
+              res.json(userCampgrounds);
             } else {
-               // load only the current user's campgrounds
-               let userCampgrounds = [];
-               allCampgrounds.forEach(campground => {
-                  if(currentUser.id == campground.author.id)
-                     {userCampgrounds.push(campground)}; 
-               });
-            // show the user's campground
-            res.render("profile",{campgrounds: userCampgrounds, page: 'profile'});
+               res.render("profile",{campgrounds: userCampgrounds, page: 'profile'});
             }
          }
       });
