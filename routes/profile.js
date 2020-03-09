@@ -12,19 +12,7 @@ function escapeRegex(text) {
 
 //INDEX - show all campgrounds
 router.get("/", isLoggedIn, function(req, res){
-//   if(req.query.search && req.xhr) {
-//       const regex = new RegExp(escapeRegex(req.query.search), 'gi');
-//       // Get all campgrounds from DB
-//       Campground.find({name: regex}, function(err, allCampgrounds){
-//          if(err){
-//             console.log(err);
-//          } else {
-//             res.status(200).json(allCampgrounds);
-//          }
-//       });
-//   } else {
    var currentUser = res.locals.currentUser;
-   console.log("Current user: " + currentUser.username);
       // Get all campgrounds from DB
       Campground.find({}).exec(function(err, allCampgrounds){
          if(err){
@@ -33,14 +21,13 @@ router.get("/", isLoggedIn, function(req, res){
             if(req.xhr) {
               res.json(allCampgrounds);
             } else {
+               // load only the current user's campgrounds
                let userCampgrounds = [];
-            allCampgrounds.forEach(campground => {
-               console.log("Campground User: " + campground.author.username)
-               if(currentUser.username == campground.author.username)
-                  {userCampgrounds.push(campground)}; 
-            });
-            console.log("all user's campgrounds: ")
-            console.log(userCampgrounds);
+               allCampgrounds.forEach(campground => {
+                  if(currentUser.id == campground.author.id)
+                     {userCampgrounds.push(campground)}; 
+               });
+            // show the user's campground
             res.render("profile",{campgrounds: userCampgrounds, page: 'profile'});
             }
          }
