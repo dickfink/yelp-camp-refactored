@@ -17,7 +17,7 @@ require('dotenv').load();
 
 //requiring routes
 var commentRoutes    = require("./routes/comments"),
-    campgroundRoutes = require("./routes/campgrounds"),
+    postRoutes = require("./routes/posts"),
     indexRoutes      = require("./routes/index"),
     profileRoutes      = require("./routes/profile")
     
@@ -63,8 +63,8 @@ app.use(function(req, res, next){
 
 
 app.use("/", indexRoutes);
-app.use("/campgrounds", campgroundRoutes);
-app.use("/campgrounds/:id/comments", commentRoutes);
+app.use("/posts", postRoutes);
+app.use("/posts/:id/comments", commentRoutes);
 app.use("/profile", profileRoutes);
 
 app.listen(port, process.env.IP, function(){

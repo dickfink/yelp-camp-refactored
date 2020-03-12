@@ -1,5 +1,4 @@
 var mongoose = require("mongoose");
-var random = require('mongoose-simple-random');
 
 var campgroundSchema = new mongoose.Schema({
    name: String,
@@ -7,8 +6,8 @@ var campgroundSchema = new mongoose.Schema({
    description: String,
    cost: Number,
    location: String,
-   lat: Number,
-   lng: Number,
+   // lat: Number,
+   // lng: Number,
    createdAt: { type: Date, default: Date.now },
    author: {
       id: {
@@ -24,7 +23,5 @@ var campgroundSchema = new mongoose.Schema({
       }
    ]
 });
-
-campgroundSchema.plugin(random);
 
 module.exports = mongoose.model("Campground", campgroundSchema);

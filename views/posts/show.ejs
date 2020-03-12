@@ -22,8 +22,8 @@
           <em>Submitted by: <%= campground.author.username %>, <%= moment(campground.createdAt).fromNow() %></em>
         </p>
         <% if(currentUser && campground.author.id.equals(currentUser._id) || currentUser && currentUser.isAdmin){ %>
-        <a class="btn btn-warning" href="/campgrounds/<%= campground._id %>/edit">Edit</a>
-        <form action="/campgrounds/<%= campground._id %>?_method=DELETE" method="POST" class="delete-form">
+        <a class="btn btn-warning" href="/posts/<%= campground._id %>/edit">Edit</a>
+        <form action="/posts/<%= campground._id %>?_method=DELETE" method="POST" class="delete-form">
           <button class="btn btn-danger">Delete</button>
         </form>
         <% } %>
@@ -31,7 +31,7 @@
     </div>
     <div class="well">
       <div class="text-right">
-        <a class="btn btn-success" href="/campgrounds/<%= campground._id %>/comments/new">Add New Comment</a>
+        <a class="btn btn-success" href="/posts/<%= campground._id %>/comments/new">Add New Comment</a>
       </div>
       <hr>
       <% campground.comments.forEach(function(comment){ %>

@@ -2,11 +2,41 @@ var express = require("express");
 var router  = express.Router();
 var passport = require("passport");
 var User = require("../models/user");
+var Campground = require("../models/campground");
+var middleware = require("../middleware");
+var { isLoggedIn, checkUserCampground, checkUserComment, isAdmin, isSafe } = middleware; // destructuring assignment
 
 //root route
+// router.get("/", function(req, res){
+//     res.render("/campgrounds");
+// });
+
+//   SHOW RANDOM CAMPGROUND
 router.get("/", function(req, res){
-    res.render("landing");
-});
+    if(res.locals.currentUser){
+    var currentUser = res.locals.currentUser;
+    console.log(currentUser);
+       // Get all campgrounds from DB where the author's ID matches the current user's ID
+       Campground.find({"author.id": currentUser.id}).exec(function(err, userCampgrounds){
+          // choose a random # for the total results
+          let random = Math.floor(Math.random() * userCampgrounds.length)
+          let randomCampground = userCampgrounds[random];
+          if(err){
+              console.log(err);
+          } else {
+             if(req.xhr) {
+               res.json(randomCampground);
+             } else {
+                res.render("random",{campground: randomCampground, page: 'random'});
+             }
+             
+          }
+       });}
+       else{
+        console.log('not logged in')
+        res.render("random",{campground: [], page: 'random'});
+       }
+   });
 
 // show register form
 router.get("/register", function(req, res){
