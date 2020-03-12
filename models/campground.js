@@ -1,4 +1,5 @@
 var mongoose = require("mongoose");
+var random = require('mongoose-simple-random');
 
 var campgroundSchema = new mongoose.Schema({
    name: String,
@@ -23,5 +24,7 @@ var campgroundSchema = new mongoose.Schema({
       }
    ]
 });
+
+campgroundSchema.plugin(random);
 
 module.exports = mongoose.model("Campground", campgroundSchema);
